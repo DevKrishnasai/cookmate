@@ -4,20 +4,36 @@ import { LucideSettings, Search } from "lucide-react";
 import React, { useState } from "react";
 import RecipeCreateDialog from "./RecipeCreateDialog";
 import { toast } from "sonner";
+import { createRecipe } from "@/actions/recipe";
+import { redirect, useRouter } from "next/navigation";
 
 const TopBar = () => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [recipeName, setRecipeName] = useState("");
+  const router = useRouter();
   //TODO : add search functionality
 
-  const createARecipe = () => {
+  const createARecipe = async () => {
     toast.loading("Creating recipe...", {
       id: "create-recipe",
     });
     if (!recipeName) {
       toast.error("Please enter a recipe name", {
-        id: "create-recipe-name",
+        id: "create-recipe",
+      });
+      return;
+    }
+    if (!/^[a-zA-Z0-9- ]*$/.test(recipeName)) {
+      toast.error("Recipe name should not contain special characters", {
+        id: "create-recipe",
+      });
+      return;
+    }
+    const data = await createRecipe(recipeName);
+    if (!data) {
+      toast.error("Error creating recipe", {
+        id: "create-recipe",
       });
       return;
     }
@@ -25,7 +41,7 @@ const TopBar = () => {
     toast.success("Recipe created successfully", {
       id: "create-recipe",
     });
-    //TODO : add recipe creation logic
+    router.push(`/create-recipe/${recipeName.trim().split(" ").join("-")}`);
   };
   return (
     <div className="w-full my-2 flex justify-between items-center">
@@ -43,6 +59,7 @@ const TopBar = () => {
           open={open}
           setOpen={setOpen}
           onSubmit={createARecipe}
+          setRecipeName={setRecipeName}
         />
       </div>
     </div>

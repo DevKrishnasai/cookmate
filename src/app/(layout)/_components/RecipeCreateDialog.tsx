@@ -17,6 +17,7 @@ interface RecipeCreateDialogProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onSubmit: () => void;
+  setRecipeName: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const RecipeCreateDialog = ({
@@ -24,6 +25,7 @@ const RecipeCreateDialog = ({
   open,
   setOpen,
   onSubmit,
+  setRecipeName,
 }: RecipeCreateDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={() => setOpen((o) => !o)}>
@@ -35,8 +37,13 @@ const RecipeCreateDialog = ({
             Create a new recipe to show your skills to the world.
           </DialogDescription>
         </DialogHeader>
-        <Input placeholder="Recipe Name" />
-        <Button variant="outline">Create</Button>
+        <Input
+          placeholder="Recipe Name"
+          onChange={(e) => setRecipeName(e.target.value)}
+        />
+        <Button variant="outline" onClick={onSubmit}>
+          Create
+        </Button>
       </DialogContent>
     </Dialog>
   );

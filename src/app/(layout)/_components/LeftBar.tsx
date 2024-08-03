@@ -4,7 +4,7 @@ import NavLinks from "./NavLinks";
 
 const LeftBar = () => {
   return (
-    <div className="w-1/5 border rounded-lg m-6 mr-3 flex flex-col justify-between text-center ">
+    <div className="w-full h-[calc(100vh-50px)]  bg-green-50 lg:bg-transparent  border-2 rounded-lg m-6 mr-3 flex flex-col justify-between text-center shadow-xl">
       <div>
         <h2 className="text-center font-bold text-2xl mt-3">LOGO</h2>
         <div className="flex flex-col gap-3 justify-center items-center w-full mx-auto h-60 mt-10">

@@ -12,3 +12,68 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  name      String
+  authId    String     @unique
+  recipes   Recipe[]   @relation(name: "CreatedRecipe")
+  favorites Favorite[] @relation(name: "favorated")
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Recipe {
+  id           String       @id @default(cuid())
+  title        String
+  description  String       @default("")
+  image        String       @default("")
+  cookTime     Int          @default(10)
+  noOfServings Int          @default(1)
+  difficulty   Difficulty   @default(Easy)
+  ingredients  Ingredient[]
+  user         User         @relation(name: "CreatedRecipe", fields: [userId], references: [id])
+  userId       String
+  favorated    Favorite[]   @relation(name: "favorated")
+  steps        Step[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+enum Difficulty {
+  Easy
+  Medium
+  Hard
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(name: "favorated", fields: [userId], references: [id])
+  recipeId  String
+  recipe    Recipe   @relation(name: "favorated", fields: [recipeId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Step {
+  id          String   @id @default(cuid())
+  recipeId    String
+  recipe      Recipe   @relation(fields: [recipeId], references: [id])
+  step        Int
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Ingredient {
+  id           String   @id @default(cuid())
+  recipeId     String
+  recipe       Recipe   @relation(fields: [recipeId], references: [id])
+  name         String
+  quantity     Int
+  quantityType String   @default("Unit")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
