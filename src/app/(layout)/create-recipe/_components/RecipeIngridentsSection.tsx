@@ -18,21 +18,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { recipeQuantityInformation } from "@/schemas/recipe";
+import { recipeIngredient, recipeQuantityInformation } from "@/schemas/recipe";
 import { PlusCircle } from "lucide-react";
 import * as z from "zod";
 import { Ingredient, Recipe } from "@prisma/client";
 import { toast } from "sonner";
 import { updateRecipeIngredients } from "@/actions/recipe";
+import { useCallback, useEffect, useState } from "react";
+import { RecipeIngredientType } from "@/types/recipe";
 
 type RecipeFormType = z.infer<typeof recipeQuantityInformation>;
 
 const RecipeIngredientsSection = ({
   recipe,
   ingredients,
+  onSubmit,
+  setLoading,
 }: {
   recipe: Recipe;
   ingredients: Ingredient[];
+  onSubmit: (data: RecipeIngredientType) => void;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const filteredIngredients = ingredients.map((ingredient) => ({
     name: ingredient.name || "",
@@ -46,7 +52,7 @@ const RecipeIngredientsSection = ({
       | "Milliliter"
       | "Unit",
   }));
-
+  const [formData, setFormData] = useState<RecipeIngredientType | null>(null);
   const form = useForm<RecipeFormType>({
     resolver: zodResolver(recipeQuantityInformation),
     defaultValues: {
@@ -60,31 +66,61 @@ const RecipeIngredientsSection = ({
     name: "ingredients",
   });
 
-  const onSubmit = async (data: RecipeFormType) => {
-    toast.loading("Saving recipe information", {
-      id: "recipe-ingredients",
-    });
-
-    const formattedIngredients = data.ingredients.map((ing) => ({
-      name: ing.name,
-      quantity: ing.quantity,
-      quantity_type: ing.quantity_type,
-    }));
-
-    const isSuccess = await updateRecipeIngredients(recipe.id, {
-      ingredients: formattedIngredients,
-    });
-
-    if (isSuccess) {
-      toast.success("Recipe information saved", {
-        id: "recipe-ingredients",
+  const saveIngredients = useCallback(
+    async (data: RecipeFormType) => {
+      setLoading(true);
+      toast.loading("auto saveing...", {
+        id: "auto-save",
       });
-    } else {
-      toast.error("Failed to save recipe information", {
-        id: "recipe-ingredients",
+
+      const formattedIngredients = data.ingredients.map((ing) => ({
+        name: ing.name,
+        quantity: ing.quantity,
+        quantity_type: ing.quantity_type,
+      }));
+
+      const isSuccess = await updateRecipeIngredients(recipe.id, {
+        ingredients: formattedIngredients,
       });
+
+      if (isSuccess) {
+        toast.success("saved your recipe...", {
+          id: "auto-save",
+        });
+      } else {
+        toast.error("Failed to auto save", {
+          id: "auto-save",
+        });
+      }
+      setLoading(false);
+    },
+    [recipe.id]
+  );
+
+  useEffect(() => {
+    if (formData) {
+      const timeout = setTimeout(() => {
+        console.log("Auto saving...");
+        saveIngredients(formData);
+      }, 5000);
+
+      return () => clearTimeout(timeout);
     }
-  };
+  }, [formData, saveIngredients]);
+
+  useEffect(() => {
+    const onChange = (data: RecipeIngredientType) => {
+      const formatedData = recipeQuantityInformation.safeParse(data);
+      if (formatedData.success) {
+        setFormData(formatedData.data);
+      }
+    };
+
+    const subscription = form.watch((value) => {
+      onChange(value as RecipeIngredientType);
+    });
+    return () => subscription.unsubscribe();
+  }, [form]);
 
   const addIngredient = () => {
     append({ name: "", quantity: 1, quantity_type: "Unit" });
@@ -100,7 +136,7 @@ const RecipeIngredientsSection = ({
       >
         <div className="flex justify-between items-center gap-4">
           <h1 className="font-bold text-xl">Recipe Ingredients</h1>
-          <Button type="submit">Save</Button>
+          {/* <Button type="submit">Save</Button> */}
         </div>
         <div className="w-full flex flex-col gap-5">
           {fields.map((field, index) => (

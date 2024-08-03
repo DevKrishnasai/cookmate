@@ -24,15 +24,20 @@ import { RecipeInformationType } from "@/types/recipe";
 import { recipeInformation } from "@/schemas/recipe";
 import { Textarea } from "@/components/ui/textarea";
 import { Recipe } from "@prisma/client";
+import { UploadButton } from "@/lib/utils";
+import { ImageIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface FieldsForRecipeInformationProps {
   onSubmit: (data: RecipeInformationType) => void;
   recipe: Recipe;
+  onChange: (data: RecipeInformationType) => void;
 }
 
 const FieldsForRecipeInformation = ({
   recipe,
   onSubmit,
+  onChange,
 }: FieldsForRecipeInformationProps) => {
   const form = useForm<RecipeInformationType>({
     resolver: zodResolver(recipeInformation),
@@ -42,8 +47,19 @@ const FieldsForRecipeInformation = ({
       difficulty: recipe.difficulty,
       cooking_time: recipe.cookTime,
       no_of_servings: recipe.noOfServings,
+      url: recipe.image,
     },
+    mode: "onChange",
   });
+
+  const [edit, setEdit] = useState(false);
+
+  useEffect(() => {
+    const subscription = form.watch((value) => {
+      onChange(value as RecipeInformationType);
+    });
+    return () => subscription.unsubscribe();
+  }, [form, onChange]);
 
   return (
     <div>
@@ -52,6 +68,38 @@ const FieldsForRecipeInformation = ({
           onSubmit={form.handleSubmit(onSubmit, (err) => console.error(err))}
           className="space-y-4"
         >
+          <div
+            className="w-full h-60 flex justify-center items-center border-2 border-dashed rounded-md hover:border-primary cursor-pointer hover:cursor-pointer"
+            onClick={() => setEdit(true)}
+          >
+            {edit ? (
+              <UploadButton
+                endpoint="thumbnail"
+                onClientUploadComplete={(res) => {
+                  setEdit(false);
+                  form.setValue("url", res[0].url);
+                  console.log(res);
+                }}
+              />
+            ) : form.getValues("url") === "" ? (
+              <div className=" flex flex-col  justify-center items-center ">
+                <ImageIcon size={40} />
+                <p className="text-gray-500">No thumbnail uploaded</p>
+                <p
+                  className="hover:underline hover:cursor-pointer"
+                  onClick={() => setEdit(true)}
+                >
+                  change
+                </p>
+              </div>
+            ) : (
+              <img
+                src={form.getValues("url")}
+                alt="thumbnail"
+                className="object-fill w-full h-full  rounded-md"
+              />
+            )}
+          </div>
           <FormField
             control={form.control}
             name="title"
@@ -161,9 +209,9 @@ const FieldsForRecipeInformation = ({
               </FormItem>
             )}
           />
-          <Button className="w-full" variant={"outline"} type="submit">
+          {/* <Button className="w-full" variant={"outline"} type="submit">
             Save
-          </Button>
+          </Button> */}
         </form>
       </Form>
     </div>
