@@ -1,18 +1,32 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { LucideSettings, Search } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import RecipeCreateDialog from "./RecipeCreateDialog";
 import { toast } from "sonner";
 import { createRecipe } from "@/actions/recipe";
-import { redirect, useRouter } from "next/navigation";
-
-const TopBar = () => {
+import { useRouter } from "next/navigation";
+interface TopBarProps {
+  recipe: string;
+  // setSearch: (search: string) => void;
+}
+const TopBar = ({ recipe }: TopBarProps) => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
   const [recipeName, setRecipeName] = useState("");
   const router = useRouter();
-  //TODO : add search functionality
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (search) {
+        router.push(`/home?recipe=${search}`);
+      } else {
+        router.push(`/home`);
+      }
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [router, search]);
 
   const createARecipe = async () => {
     toast.loading("Creating recipe...", {
@@ -30,19 +44,23 @@ const TopBar = () => {
       });
       return;
     }
+    setLoading(true);
     const data = await createRecipe(recipeName);
     if (!data) {
       toast.error("Error creating recipe", {
         id: "create-recipe",
       });
+      setLoading(false);
       return;
     }
+    setLoading(false);
     setOpen(false);
     toast.success("Recipe created successfully", {
       id: "create-recipe",
     });
-    router.push(`/create-recipe/${recipeName.trim().split(" ").join("-")}`);
+    router.push(`/create-recipe/${data}`);
   };
+
   return (
     <div className="w-full my-2 flex justify-between items-center">
       <div className="w-72 flex justify-start items-center border-2 gap-3 p-3 rounded-lg">
@@ -50,6 +68,8 @@ const TopBar = () => {
         <input
           placeholder="Search"
           className="border-0 outline-none w-full h-full"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
       </div>
       <div className="flex items-center gap-3">
@@ -60,6 +80,7 @@ const TopBar = () => {
           setOpen={setOpen}
           onSubmit={createARecipe}
           setRecipeName={setRecipeName}
+          loading={loading}
         />
       </div>
     </div>

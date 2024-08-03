@@ -6,6 +6,7 @@ import RightSection1 from "./RightSection";
 import LeftSection from "./LeftSection";
 import RightSection2 from "./RightSection2";
 import {
+  publishRecipe,
   updateRecipeBasicDetails,
   updateRecipeIngredients,
   updateRecipeSteps,
@@ -16,13 +17,22 @@ import {
   RecipeStepType,
 } from "@/types/recipe";
 import { Ingredient, Recipe, Step } from "@prisma/client";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface PageWraperProps {
   recipe: Recipe & { ingredients: Ingredient[]; steps: Step[] };
+  isPublishable: boolean;
 }
 
-const PageWraper = ({ recipe }: PageWraperProps) => {
+const PageWraper = ({ recipe, isPublishable }: PageWraperProps) => {
   const [loading, setLoading] = useState(false);
+  const [basic, setBasic] = useState<RecipeInformationType | null>(null);
+  const [ingredients, setIngredients] = useState<RecipeIngredientType | null>(
+    null
+  );
+  const [steps, setSteps] = useState<RecipeStepType | null>(null);
+  const router = useRouter();
   const basicDetails = async (data: RecipeInformationType) => {
     const isSuccess = await updateRecipeBasicDetails(recipe.id, {
       ...data,
@@ -47,6 +57,23 @@ const PageWraper = ({ recipe }: PageWraperProps) => {
     });
   };
 
+  const onPublish = async () => {
+    toast.loading("Publishing Recipe", {
+      id: "publishing",
+    });
+    const isSuccess = await publishRecipe(recipe.id);
+    if (isSuccess) {
+      toast.success("Recipe Published", {
+        id: "publishing",
+      });
+    } else {
+      toast.error("Failed to Publish Recipe", {
+        id: "publishing",
+      });
+    }
+    router.refresh();
+  };
+
   return (
     <>
       <div className="flex justify-between items-center m-2">
@@ -56,7 +83,12 @@ const PageWraper = ({ recipe }: PageWraperProps) => {
         </Link> */}
         <PathStack />
 
-        <ActionButtons loading={loading} />
+        <ActionButtons
+          loading={loading}
+          isPublishable={isPublishable}
+          isPublished={recipe.published}
+          onPublish={onPublish}
+        />
       </div>
       <div className="m-2 flex flex-col lg:flex-row max-h-[calc(100vh-140px)] gap-4 overflow-y-auto">
         <div className="w-full h-full  lg:w-2/5 border-2 shadow-xl rounded-lg p-3">
@@ -65,6 +97,8 @@ const PageWraper = ({ recipe }: PageWraperProps) => {
             recipe={recipe}
             onSubmit={basicDetails}
             setLoading={setLoading}
+            formData={basic}
+            setFormData={setBasic}
           />
         </div>
         <div className="flex w-full flex-col gap-5">
@@ -74,6 +108,8 @@ const PageWraper = ({ recipe }: PageWraperProps) => {
               ingredients={recipe.ingredients}
               onSubmit={ingredientsDetails}
               setLoading={setLoading}
+              formData={ingredients}
+              setFormData={setIngredients}
             />
           </div>
           <div className="w-full  min-h-fit max-h-full border-2 rounded-lg p-3 overflow-y-auto shadow-xl">
@@ -82,6 +118,8 @@ const PageWraper = ({ recipe }: PageWraperProps) => {
               steps={recipe.steps}
               onSubmit={stepsDetails}
               setLoading={setLoading}
+              formData={steps}
+              setFormData={setSteps}
             />
           </div>
         </div>

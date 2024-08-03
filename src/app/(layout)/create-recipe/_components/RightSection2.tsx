@@ -7,11 +7,15 @@ const RightSection2 = ({
   steps,
   onSubmit,
   setLoading,
+  formData,
+  setFormData,
 }: {
   recipe: Recipe;
   steps: Step[];
   onSubmit: (data: RecipeStepType) => void;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  formData: RecipeStepType | null;
+  setFormData: React.Dispatch<React.SetStateAction<RecipeStepType | null>>;
 }) => {
   return (
     <RecipeStepsSection
@@ -19,6 +23,8 @@ const RightSection2 = ({
       steps={steps}
       onSubmit={onSubmit}
       setLoading={setLoading}
+      formData={formData}
+      setFormData={setFormData}
     />
   );
 };

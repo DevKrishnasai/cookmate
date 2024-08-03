@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 import React from "react";
 const links = [
   { href: "/home", label: "Home" },
-  { href: "/trending", label: "Trending" },
-  { href: "/profile", label: "Profile" },
+  { href: "/dashboard", label: "Dashboard" },
+  { href: "/settings", label: "Settings" },
 ];
 const NavLinks = () => {
   const activePath = usePathname();
@@ -17,8 +17,8 @@ const NavLinks = () => {
           href={href}
           key={label}
           className={cn(
-            "text-base bg-black text-white w-3/4 h-full text-center p-2 rounded-lg ",
-            activePath === href && "font-bold"
+            "text-base  w-3/4 h-full text-center p-2 rounded-lg border",
+            activePath === href && "font-bold bg-black text-white"
           )}
         >
           {label}

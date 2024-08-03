@@ -18,12 +18,15 @@ import { PlusCircle } from "lucide-react";
 import { Recipe, Step } from "@prisma/client";
 import { toast } from "sonner";
 import { updateRecipeSteps } from "@/actions/recipe";
+import { useRouter } from "next/navigation";
 
 interface RecipeStepsSectionProps {
   recipe: Recipe;
   steps: Step[];
   onSubmit: (data: RecipeStepType) => void;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  formData: RecipeStepType | null;
+  setFormData: React.Dispatch<React.SetStateAction<RecipeStepType | null>>;
 }
 
 const RecipeStepsSection = ({
@@ -31,6 +34,8 @@ const RecipeStepsSection = ({
   steps,
   onSubmit,
   setLoading,
+  formData,
+  setFormData,
 }: RecipeStepsSectionProps) => {
   const form = useForm<RecipeStepType>({
     resolver: zodResolver(recipeStepsInformation),
@@ -39,25 +44,29 @@ const RecipeStepsSection = ({
     },
     mode: "onChange",
   });
+  const router = useRouter();
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "steps",
   });
 
-  const [formData, setFormData] = useState<RecipeStepType | null>(null);
   const saveRecipeInfo = useCallback(
     async (data: RecipeStepType) => {
+      let isSuccess = recipeStepsInformation.safeParse(data);
+      if (!isSuccess.success) {
+        return;
+      }
       setLoading(true);
       toast.loading("Saving recipe information", {
         id: "recipe-steps",
       });
 
-      const isSuccess = await updateRecipeSteps(recipe.id, {
-        steps: data.steps,
+      const success = await updateRecipeSteps(recipe.id, {
+        steps: isSuccess.data.steps,
       });
 
-      if (isSuccess) {
+      if (success) {
         toast.success("Recipe information saved", {
           id: "recipe-steps",
         });
@@ -67,6 +76,7 @@ const RecipeStepsSection = ({
         });
       }
       setLoading(false);
+      router.refresh();
     },
     [recipe.id]
   );

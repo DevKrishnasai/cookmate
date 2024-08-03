@@ -7,11 +7,17 @@ const RightSection1 = ({
   ingredients,
   onSubmit,
   setLoading,
+  formData,
+  setFormData,
 }: {
   recipe: Recipe;
   ingredients: Ingredient[];
   onSubmit: (data: RecipeIngredientType) => void;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  formData: RecipeIngredientType | null;
+  setFormData: React.Dispatch<
+    React.SetStateAction<RecipeIngredientType | null>
+  >;
 }) => {
   return (
     <RecipeIngridentsSection
@@ -19,6 +25,8 @@ const RightSection1 = ({
       ingredients={ingredients}
       onSubmit={onSubmit}
       setLoading={setLoading}
+      formData={formData}
+      setFormData={setFormData}
     />
   );
 };

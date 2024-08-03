@@ -9,14 +9,12 @@ const page = async ({ params }: { params: { recipe: string } }) => {
     redirect("/sign-in");
   }
 
-  const recipeTitle = params.recipe.replace(/-/g, " ");
-
-  console.log(recipeTitle);
+  const recipeId = params.recipe;
 
   const recipe = await db.recipe.findFirst({
     where: {
       userId: user.id,
-      title: recipeTitle,
+      id: recipeId,
     },
     include: {
       ingredients: true,
@@ -28,9 +26,21 @@ const page = async ({ params }: { params: { recipe: string } }) => {
     redirect("/profile");
   }
 
+  const requiredFields = [
+    recipe.title.length > 2,
+    recipe.description.length > 10,
+    recipe.steps.length > 0,
+    recipe.cookTime > 0,
+    recipe.image.length > 0,
+    recipe.ingredients.every((ing) => ing.name.length > 0),
+    recipe.steps.every((step) => step.description.length > 3),
+  ];
+
+  const isRecipePublishable = requiredFields.every((field) => field);
+
   return (
     <div className="w-full border-2 rounded-lg shadow-xl m-6 ml-0 p-2 space-y-3">
-      <PageWraper recipe={recipe} />
+      <PageWraper recipe={recipe} isPublishable={isRecipePublishable} />
     </div>
   );
 };

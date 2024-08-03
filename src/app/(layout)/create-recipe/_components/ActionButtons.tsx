@@ -4,19 +4,16 @@ import { CloudDownload, CloudUpload } from "lucide-react";
 import React, { useEffect, useState } from "react";
 interface ActionButtonsProps {
   loading: boolean;
+  isPublishable: boolean;
+  onPublish: () => void;
+  isPublished: boolean;
 }
-const ActionButtons = ({ loading }: ActionButtonsProps) => {
-  //after every 10 seconds, the useEffect will run and set the loading to false if it was true
-  //   useEffect(() => {
-  //     const save = setInterval(() => {
-  //       if (loading) {
-  //         setLoading(false);
-  //       }
-  //     }, 10000);
-
-  //     return () => clearInterval(save);
-  //   }, [loading]);
-
+const ActionButtons = ({
+  loading,
+  isPublishable,
+  onPublish,
+  isPublished,
+}: ActionButtonsProps) => {
   return (
     <div className="flex  gap-3 items-center">
       {loading ? (
@@ -32,7 +29,9 @@ const ActionButtons = ({ loading }: ActionButtonsProps) => {
       )}
 
       <Button variant={"outline"}>Preview</Button>
-      <Button variant={"outline"}>Publish</Button>
+      <Button variant={"outline"} disabled={!isPublishable} onClick={onPublish}>
+        {isPublished ? "UnPublish" : "Publish"}
+      </Button>
     </div>
   );
 };

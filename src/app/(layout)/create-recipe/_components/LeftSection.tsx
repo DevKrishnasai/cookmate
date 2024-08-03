@@ -7,28 +7,43 @@ import { toast } from "sonner";
 import { updateRecipeBasicDetails } from "@/actions/recipe";
 import { Recipe } from "@prisma/client";
 import { recipeInformation } from "@/schemas/recipe";
+import { useRouter } from "next/navigation";
 
 interface LeftSectionProps {
   recipe: Recipe;
   onSubmit: (data: RecipeInformationType) => void;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  formData: RecipeInformationType | null;
+  setFormData: React.Dispatch<
+    React.SetStateAction<RecipeInformationType | null>
+  >;
 }
 
-const LeftSection = ({ recipe, onSubmit, setLoading }: LeftSectionProps) => {
-  const [formData, setFormData] = useState<RecipeInformationType | null>(null);
+const LeftSection = ({
+  recipe,
+  onSubmit,
+  setLoading,
+  formData,
+  setFormData,
+}: LeftSectionProps) => {
+  const router = useRouter();
 
   const saveRecipeInfo = useCallback(
     async (data: RecipeInformationType) => {
+      const isSuccess = recipeInformation.safeParse(data);
+      if (!isSuccess.success) {
+        return;
+      }
       setLoading(true);
       toast.loading("auto saving...", {
         id: "auto-save",
       });
 
-      const isSuccess = await updateRecipeBasicDetails(recipe.id, {
+      const success = await updateRecipeBasicDetails(recipe.id, {
         ...data,
       });
 
-      if (isSuccess) {
+      if (success) {
         toast.success("saved your recipe...", {
           id: "auto-save",
         });
@@ -38,6 +53,7 @@ const LeftSection = ({ recipe, onSubmit, setLoading }: LeftSectionProps) => {
         });
       }
       setLoading(false);
+      router.refresh();
     },
     [recipe.id]
   );

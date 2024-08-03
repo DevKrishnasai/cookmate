@@ -26,6 +26,7 @@ import { toast } from "sonner";
 import { updateRecipeIngredients } from "@/actions/recipe";
 import { useCallback, useEffect, useState } from "react";
 import { RecipeIngredientType } from "@/types/recipe";
+import { useRouter } from "next/navigation";
 
 type RecipeFormType = z.infer<typeof recipeQuantityInformation>;
 
@@ -34,11 +35,17 @@ const RecipeIngredientsSection = ({
   ingredients,
   onSubmit,
   setLoading,
+  formData,
+  setFormData,
 }: {
   recipe: Recipe;
   ingredients: Ingredient[];
   onSubmit: (data: RecipeIngredientType) => void;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  formData: RecipeIngredientType | null;
+  setFormData: React.Dispatch<
+    React.SetStateAction<RecipeIngredientType | null>
+  >;
 }) => {
   const filteredIngredients = ingredients.map((ingredient) => ({
     name: ingredient.name || "",
@@ -52,7 +59,7 @@ const RecipeIngredientsSection = ({
       | "Milliliter"
       | "Unit",
   }));
-  const [formData, setFormData] = useState<RecipeIngredientType | null>(null);
+
   const form = useForm<RecipeFormType>({
     resolver: zodResolver(recipeQuantityInformation),
     defaultValues: {
@@ -60,6 +67,7 @@ const RecipeIngredientsSection = ({
     },
     mode: "onChange",
   });
+  const router = useRouter();
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -68,6 +76,10 @@ const RecipeIngredientsSection = ({
 
   const saveIngredients = useCallback(
     async (data: RecipeFormType) => {
+      const isSuccess = recipeQuantityInformation.safeParse(data);
+      if (!isSuccess.success) {
+        return;
+      }
       setLoading(true);
       toast.loading("auto saveing...", {
         id: "auto-save",
@@ -79,11 +91,11 @@ const RecipeIngredientsSection = ({
         quantity_type: ing.quantity_type,
       }));
 
-      const isSuccess = await updateRecipeIngredients(recipe.id, {
+      const success = await updateRecipeIngredients(recipe.id, {
         ingredients: formattedIngredients,
       });
 
-      if (isSuccess) {
+      if (success) {
         toast.success("saved your recipe...", {
           id: "auto-save",
         });
@@ -93,6 +105,7 @@ const RecipeIngredientsSection = ({
         });
       }
       setLoading(false);
+      router.refresh();
     },
     [recipe.id]
   );

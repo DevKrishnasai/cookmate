@@ -8,7 +8,6 @@ import {
   RecipeIngredientType,
   RecipeStepType,
 } from "@/types/recipe";
-import { Ingredient } from "@prisma/client";
 
 export async function createRecipe(name: string) {
   try {
@@ -20,17 +19,17 @@ export async function createRecipe(name: string) {
 
     console.log(user, "~~~~~~~~~~~~~~~~", name);
 
-    await db.recipe.create({
+    const data = await db.recipe.create({
       data: {
         title: name,
         userId: user.id,
       },
     });
 
-    return true;
+    return data.id;
   } catch (error) {
     console.error("Error creating recipe", error);
-    return false;
+    return null;
   }
 }
 
@@ -149,4 +148,179 @@ export async function updateRecipeSteps(
   });
 
   return true;
+}
+
+export async function publishRecipe(recipeId: string) {
+  try {
+    const user = await getUserElseCreate();
+
+    if (!user) {
+      redirect("/sign-in");
+    }
+
+    const recipe = await db.recipe.findFirst({
+      where: {
+        userId: user.id,
+        id: recipeId,
+      },
+    });
+
+    if (!recipe) {
+      return false;
+    }
+
+    await db.recipe.update({
+      where: {
+        userId: user.id,
+        id: recipeId,
+      },
+      data: {
+        published: !recipe.published,
+      },
+    });
+
+    return true;
+  } catch (error) {
+    console.error("Error creating recipe", error);
+    return false;
+  }
+}
+
+export async function getRecipesWithName(name: string) {
+  try {
+    const recipes = await db.recipe.findMany({
+      where: {
+        title: {
+          contains: name,
+        },
+        published: true,
+      },
+      include: {
+        _count: {
+          select: {
+            favorated: true,
+            Ratings: true,
+          },
+        },
+      },
+    });
+
+    return recipes;
+  } catch (error) {
+    console.error("Error getting recipes", error);
+    return [];
+  }
+}
+
+export type SearchResultsType = Awaited<ReturnType<typeof getRecipesWithName>>;
+
+export async function getFullRecipeDetails(title: string) {
+  try {
+    const recipe = await db.recipe.findFirst({
+      where: {
+        title,
+        published: true,
+      },
+      include: {
+        _count: {
+          select: {
+            favorated: true,
+            Ratings: true,
+          },
+        },
+        steps: true,
+        ingredients: true,
+      },
+    });
+    return recipe;
+  } catch (error) {
+    console.error("Error getting recipes", error);
+    return null;
+  }
+}
+
+export type DetailedRecipeType = Awaited<
+  ReturnType<typeof getFullRecipeDetails>
+>;
+
+export async function favoriteARecipe(recipeId: string) {
+  try {
+    const user = await getUserElseCreate();
+
+    if (!user) {
+      redirect("/sign-in");
+    }
+
+    const favorite = await db.favorite.findFirst({
+      where: {
+        userId: user.id,
+        recipeId,
+      },
+    });
+
+    if (favorite) {
+      await db.favorite.delete({
+        where: {
+          id: favorite.id,
+        },
+      });
+
+      return true;
+    }
+
+    await db.favorite.create({
+      data: {
+        userId: user.id,
+        recipeId,
+      },
+    });
+
+    return true;
+  } catch (error) {
+    console.error("Error favoriting recipe", error);
+    return false;
+  }
+}
+
+export async function rateARecipe(recipeId: string, stars: number) {
+  try {
+    const user = await getUserElseCreate();
+
+    if (!user) {
+      redirect("/sign-in");
+    }
+
+    const rating = await db.rating.findFirst({
+      where: {
+        userId: user.id,
+        recipeId,
+      },
+    });
+
+    if (rating) {
+      await db.rating.update({
+        where: {
+          id: rating.id,
+        },
+        data: {
+          stars,
+        },
+      });
+
+      return true;
+    }
+
+    await db.rating.create({
+      data: {
+        userId: user.id,
+        recipeId,
+        stars,
+      },
+    });
+
+    return true;
+  } catch (error) {
+    console.error("Error rating recipe", error);
+    return false;
+  }
 }
