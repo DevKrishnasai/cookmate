@@ -7,6 +7,8 @@ import { CookingPot, Star, Heart, User } from "lucide-react";
 import { getUserElseCreate } from "@/actions/user";
 import { sideBarData, SideBarType } from "@/actions/sidebar";
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
+import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const LeftBar = () => {
   const [user, setUser] = useState<SideBarType | null>(null);
@@ -42,8 +44,33 @@ const LeftBar = () => {
 
   if (loading) {
     return (
-      <div className="w-full h-[calc(100vh-50px)] bg-green-50 lg:bg-white border-2 rounded-lg m-6 mr-3 flex flex-col justify-center items-center shadow-xl">
-        <h2 className="text-2xl font-bold text-gray-800">Loading...</h2>
+      <div className="w-full h-[calc(100vh-50px)] bg-green-50 lg:bg-white border-2 rounded-lg m-6 mr-3 flex flex-col justify-between shadow-xl overflow-y-auto z-50">
+        <div>
+          <Skeleton className="h-10 w-3/4 mx-auto mt-6" />
+          <div className="flex flex-col items-center w-full mx-auto mt-10 px-4">
+            <Skeleton className="w-32 h-32 rounded-full" />
+            <Skeleton className="h-6 w-1/2 mt-4" />
+            <Skeleton className="h-4 w-1/3 mt-2" />
+            <div className="flex justify-around w-full mt-6">
+              {[...Array(3)].map((_, index) => (
+                <div key={index} className="flex flex-col items-center">
+                  <Skeleton className="w-10 h-10 rounded-full mb-1" />
+                  <Skeleton className="h-4 w-16 mt-1" />
+                  <Skeleton className="h-3 w-12 mt-1" />
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="mt-10">
+            {[...Array(4)].map((_, index) => (
+              <Skeleton key={index} className="h-10 w-3/4 mx-auto mt-4" />
+            ))}
+          </div>
+        </div>
+        <div className="p-2">
+          <Skeleton className="h-12 w-full rounded-lg" />
+          <Skeleton className="h-4 w-3/4 mx-auto mt-4" />
+        </div>
       </div>
     );
   }
@@ -51,9 +78,11 @@ const LeftBar = () => {
   return (
     <div className="w-full h-[calc(100vh-50px)] bg-green-50 lg:bg-white border-2 rounded-lg m-6 mr-3 flex flex-col justify-between shadow-xl overflow-y-auto z-50">
       <div>
-        <h2 className="text-center font-bold text-3xl mt-6 text-green-600">
-          COOKMATE
-        </h2>
+        <Link href="/">
+          <h2 className="text-center font-bold text-3xl mt-6 text-green-600">
+            COOKMATE
+          </h2>
+        </Link>
         <div className="flex flex-col items-center w-full mx-auto mt-10 px-4">
           <Avatar className="w-32 h-32 border-4 border-green-500 shadow-lg">
             {user && <AvatarImage src={user.image} />}
