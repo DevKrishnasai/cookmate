@@ -63,9 +63,12 @@ const PageWraper = ({ recipe, isPublishable }: PageWraperProps) => {
     });
     const isSuccess = await publishRecipe(recipe.id);
     if (isSuccess) {
-      toast.success("Recipe Published", {
-        id: "publishing",
-      });
+      toast.success(
+        `Recipe ${recipe.published ? "unpublished" : "published"}`,
+        {
+          id: "publishing",
+        }
+      );
     } else {
       toast.error("Failed to Publish Recipe", {
         id: "publishing",
@@ -84,6 +87,7 @@ const PageWraper = ({ recipe, isPublishable }: PageWraperProps) => {
         <PathStack />
 
         <ActionButtons
+          recipeId={recipe.id}
           loading={loading}
           isPublishable={isPublishable}
           isPublished={recipe.published}

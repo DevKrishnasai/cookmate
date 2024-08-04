@@ -1,5 +1,5 @@
 import React from "react";
-import RecipeDetail from "../_components/RecipeDetails";
+import RecipeDetail from "../../_components/RecipeDetails";
 import RightScrollSuggestions from "../_components/RightScrollSuggestions";
 import { getFullRecipeDetails } from "@/actions/recipe";
 import { getUserElseCreate } from "@/actions/user";

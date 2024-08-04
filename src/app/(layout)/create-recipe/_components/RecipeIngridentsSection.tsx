@@ -115,7 +115,7 @@ const RecipeIngredientsSection = ({
       const timeout = setTimeout(() => {
         console.log("Auto saving...");
         saveIngredients(formData);
-      }, 5000);
+      }, 3000);
 
       return () => clearTimeout(timeout);
     }

@@ -6,6 +6,7 @@ import RecipeCreateDialog from "./RecipeCreateDialog";
 import { toast } from "sonner";
 import { createRecipe } from "@/actions/recipe";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 interface TopBarProps {
   recipe: string;
   // setSearch: (search: string) => void;
@@ -62,8 +63,8 @@ const TopBar = ({ recipe }: TopBarProps) => {
   };
 
   return (
-    <div className="w-full my-2 flex justify-between items-center">
-      <div className="w-72 flex justify-start items-center border-2 gap-3 p-3 rounded-lg">
+    <div className="w-full p-2 flex justify-between items-center">
+      <div className="w-72 flex justify-start items-center border-2 gap-3 p-2 rounded-lg">
         <Search />
         <input
           placeholder="Search"
@@ -73,9 +74,11 @@ const TopBar = ({ recipe }: TopBarProps) => {
         />
       </div>
       <div className="flex items-center gap-3">
-        <LucideSettings />
+        <Link href="/settings">
+          <LucideSettings />
+        </Link>
         <RecipeCreateDialog
-          trigger={<Button variant={"outline"}>AddRecipe</Button>}
+          trigger={<Button variant={"outline"}>create recipe</Button>}
           open={open}
           setOpen={setOpen}
           onSubmit={createARecipe}

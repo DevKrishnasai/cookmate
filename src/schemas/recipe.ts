@@ -3,15 +3,19 @@ import { z } from "zod";
 export const recipeInformation = z.object({
   title: z
     .string()
-    .min(5, { message: "recipe title should be understandable" })
+    .min(3, { message: "recipe title should be understandable" })
     .max(50, { message: "recipe title should be short" }),
   no_of_servings: z.coerce.number().int().positive(),
   cooking_time: z.coerce.number().int().positive(),
   difficulty: z.enum(["Easy", "Medium", "Hard"]),
-  description: z.string().min(10, {
+  calories: z.coerce.number().int().positive(),
+  description: z.string().min(1, {
     message: "description should be at least 10 characters",
   }),
   url: z.string().optional(),
+  category: z.string().min(1, {
+    message: "category should be given",
+  }),
 });
 
 export const recipeIngredient = z.object({

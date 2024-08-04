@@ -1,18 +1,21 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { CloudDownload, CloudUpload } from "lucide-react";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 interface ActionButtonsProps {
   loading: boolean;
   isPublishable: boolean;
   onPublish: () => void;
   isPublished: boolean;
+  recipeId: string;
 }
 const ActionButtons = ({
   loading,
   isPublishable,
   onPublish,
   isPublished,
+  recipeId,
 }: ActionButtonsProps) => {
   return (
     <div className="flex  gap-3 items-center">
@@ -27,8 +30,9 @@ const ActionButtons = ({
           <span>Saved</span>
         </div>
       )}
-
-      <Button variant={"outline"}>Preview</Button>
+      <Link href={`/create-recipe/${recipeId}/preview?recipeId=${recipeId}`}>
+        <Button variant={"outline"}>Preview</Button>
+      </Link>
       <Button variant={"outline"} disabled={!isPublishable} onClick={onPublish}>
         {isPublished ? "UnPublish" : "Publish"}
       </Button>

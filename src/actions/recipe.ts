@@ -8,6 +8,7 @@ import {
   RecipeIngredientType,
   RecipeStepType,
 } from "@/types/recipe";
+import { revalidatePath } from "next/cache";
 
 export async function createRecipe(name: string) {
   try {
@@ -193,6 +194,7 @@ export async function getRecipesWithName(name: string) {
         title: {
           contains: name,
         },
+
         published: true,
       },
       include: {
@@ -202,10 +204,35 @@ export async function getRecipesWithName(name: string) {
             Ratings: true,
           },
         },
+        Ratings: {
+          select: {
+            stars: true,
+          },
+        },
       },
     });
 
-    return recipes;
+    // Calculate average rating for each recipe
+    const recipesWithAverageRating = recipes.map((recipe) => {
+      const totalStars = recipe.Ratings.reduce(
+        (sum, rating) => sum + rating.stars,
+        0
+      );
+      const averageRating =
+        recipe.Ratings.length > 0 ? totalStars / recipe.Ratings.length : 0;
+
+      return {
+        ...recipe,
+        averageRating: parseFloat(averageRating.toFixed(2)),
+        _count: {
+          ...recipe._count,
+          Ratings: undefined, // Remove this as we don't need it anymore
+        },
+        Ratings: undefined, // Remove the raw ratings data
+      };
+    });
+
+    return recipesWithAverageRating;
   } catch (error) {
     console.error("Error getting recipes", error);
     return [];
@@ -220,6 +247,30 @@ export async function getFullRecipeDetails(title: string) {
       where: {
         title,
         published: true,
+      },
+      include: {
+        _count: {
+          select: {
+            favorated: true,
+            Ratings: true,
+          },
+        },
+        steps: true,
+        ingredients: true,
+      },
+    });
+    return recipe;
+  } catch (error) {
+    console.error("Error getting recipes", error);
+    return null;
+  }
+}
+
+export async function getFullRecipeDetailsById(id: string) {
+  try {
+    const recipe = await db.recipe.findFirst({
+      where: {
+        id,
       },
       include: {
         _count: {
@@ -274,6 +325,9 @@ export async function favoriteARecipe(recipeId: string) {
         recipeId,
       },
     });
+
+    revalidatePath("/home");
+    revalidatePath("/settings");
 
     return true;
   } catch (error) {

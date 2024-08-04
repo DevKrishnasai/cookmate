@@ -7,62 +7,16 @@ import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { FcRating } from "react-icons/fc";
-import RatingPopUp from "./RatingPopUp";
-
-// interface Ingredient {
-//   amount: string;
-//   name: string;
-// }
-
-// interface Step {
-//   number: number;
-//   description: string;
-// }
-
-// interface Recipe {
-//   name: string;
-//   image: string;
-//   author: string;
-//   description: string;
-//   prepTime: string;
-//   servings: string;
-//   calories: string;
-//   ingredients: Ingredient[];
-//   steps: Step[];
-// }
-
-// const recipeData: Recipe = {
-//   name: "Portakallı Pankek",
-//   image: "/cupcakes.jpg", // Replace with your actual image path
-//   author: "Seda Turan Tarifi",
-//   description: "Herkesin severek yediği portakallı pankek tarifimiz",
-//   prepTime: "Toplam 40dk",
-//   servings: "4 kişilik",
-//   calories: "1 adet 270 kalori",
-//   ingredients: [
-//     { amount: "1 adet", name: "Portakal" },
-//     { amount: "500 gr", name: "Pankek Hamuru" },
-//     { amount: "1 adet", name: "Yumurta" },
-//     { amount: "1 paket", name: "Vanilya" },
-//     { amount: "2 yemek kaşığı", name: "Yoğurt" },
-//   ],
-//   steps: [
-//     { number: 1, description: "Portakalı yıkayın ve kabuğunu rendeleyin." },
-//     { number: 2, description: "Bir kasede pankek hamurunu hazırlayın." },
-//     {
-//       number: 3,
-//       description: "Yumurtayı, vanilyayı ve yoğurdu ekleyip karıştırın.",
-//     },
-//     { number: 4, description: "Portakal rendesini ve suyunu hamura ekleyin." },
-//     { number: 5, description: "Tavada pankekleri pişirin." },
-//   ],
-// };
+import RatingPopUp from "../recipe/_components/RatingPopUp";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface RecipeDetailProps {
   recipe: DetailedRecipeType;
   visitedUser: boolean;
   isFavorited: boolean;
   stars: number;
+  isPreview?: boolean;
 }
 
 const RecipeDetail = ({
@@ -70,10 +24,12 @@ const RecipeDetail = ({
   visitedUser,
   isFavorited,
   stars,
+  isPreview = false,
 }: RecipeDetailProps) => {
   const [completedSteps, setCompletedSteps] = React.useState<number[]>([]);
   const [isFavorite, setIsFavorite] = React.useState(isFavorited);
   const [open, setOpen] = React.useState(false);
+  const router = useRouter();
 
   const toggleStep = (stepNumber: number) => {
     setCompletedSteps((prev) =>
@@ -102,10 +58,20 @@ const RecipeDetail = ({
   const toggleFavorite = async () => {
     try {
       if (!recipe) return;
-      setIsFavorite((f) => !f);
+      toast.loading("Making this recipe a favorite", {
+        id: "favorite",
+      });
       await favoriteARecipe(recipe.id);
+      setIsFavorite((f) => !f);
+      toast.success("Recipe favorited", {
+        id: "favorite",
+      });
+      router.refresh();
     } catch (error) {
       console.error("Error while toggling favorite", error);
+      toast.error("Error while favoriting recipe", {
+        id: "favorite",
+      });
     }
   };
 
@@ -140,10 +106,11 @@ const RecipeDetail = ({
                 : `${recipe?.noOfServings} Serving`}
             </span>
             <span className="flex items-center">
-              <FaFire className="mr-2" /> 20 Calories
+              <FaFire className="mr-2" /> {recipe?.calories} Calories
             </span>
           </div>
-          {!visitedUser &&
+          {!isPreview &&
+            !visitedUser &&
             (isFavorite ? (
               <>
                 <Heart
@@ -159,7 +126,7 @@ const RecipeDetail = ({
                     <FcRating
                       size={30}
                       className={cn(
-                        "ml-3  border-none",
+                        "ml-2  border-none",
                         isFavorite && "fill-red-500"
                       )}
                       onClick={() => setOpen(true)}

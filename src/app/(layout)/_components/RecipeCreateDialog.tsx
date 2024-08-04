@@ -34,7 +34,7 @@ const RecipeCreateDialog = ({
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Are you ready to how your skills?</DialogTitle>
+          <DialogTitle>Are you ready to show your skills?</DialogTitle>
           <DialogDescription>
             Create a new recipe to show your skills to the world.
           </DialogDescription>

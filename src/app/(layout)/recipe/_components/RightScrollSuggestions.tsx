@@ -9,8 +9,8 @@ const RightScrollSuggestions = async ({ recipeId }: { recipeId: string }) => {
   let recipes = await getRecipesWithName("");
   recipes = recipes.filter((recipe) => recipe.id !== recipeId);
   return (
-    <div className="w-1/4 hidden lg:flex h-full border-2 rounded-lg shadow-xl m-6 ml-0 p-2 space-y-3 overflow-y-auto">
-      <div className="grid grid-cols-1 gap-4 overflow-y-auto">
+    <div className="w-1/4 hidden lg:flex h-full border-2 rounded-lg shadow-xl m-6 ml-0 p-2  overflow-y-auto">
+      <div className="  overflow-y-auto w-full h-full">
         {recipes.map((recipe) => (
           <RecipeCard key={recipe.id} recipe={recipe} />
         ))}
@@ -23,7 +23,7 @@ export default RightScrollSuggestions;
 
 const RecipeCard = ({ recipe }: { recipe: SearchResultsType[0] }) => (
   <Link href={`/recipe/${recipe.title.trim().split(" ").join("-")}`}>
-    <Card className="w-full">
+    <Card className="w-full mt-2">
       <CardContent className="p-0">
         <img
           src={recipe.image}
@@ -48,9 +48,9 @@ const RecipeCard = ({ recipe }: { recipe: SearchResultsType[0] }) => (
         </div>
         <div className="flex justify-between items-center w-full mt-2">
           <span className="text-sm text-gray-500">{recipe.cookTime} mins</span>
-          <Button variant="outline" size="sm">
+          {/* <Button variant="outline" size="sm">
             View Recipe
-          </Button>
+          </Button> */}
         </div>
       </CardFooter>
     </Card>

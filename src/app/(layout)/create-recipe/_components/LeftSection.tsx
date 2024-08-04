@@ -63,7 +63,7 @@ const LeftSection = ({
       const timeout = setTimeout(() => {
         console.log("Auto saving...");
         saveRecipeInfo(formData);
-      }, 5000);
+      }, 3000);
 
       return () => clearTimeout(timeout);
     }

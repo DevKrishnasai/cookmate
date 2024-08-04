@@ -27,6 +27,7 @@ export async function getUserElseCreate() {
             auth?.firstName ||
             auth?.emailAddresses[0].emailAddress.split("@")[0]!,
           email: auth?.emailAddresses[0].emailAddress!,
+          image: auth?.imageUrl,
         },
       });
     }

@@ -1,7 +1,13 @@
 import React from "react";
 import SideBarWraper from "@/components/SideBarWraper";
+import { auth } from "@clerk/nextjs/server";
+import { getUserElseCreate } from "@/actions/user";
 
-const layout = ({ children }: { children: React.ReactNode }) => {
+const layout = async ({ children }: { children: React.ReactNode }) => {
+  const { userId } = auth();
+  if (userId) {
+    await getUserElseCreate();
+  }
   return <SideBarWraper>{children}</SideBarWraper>;
 };
 

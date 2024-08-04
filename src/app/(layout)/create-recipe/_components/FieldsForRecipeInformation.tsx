@@ -48,6 +48,8 @@ const FieldsForRecipeInformation = ({
       cooking_time: recipe.cookTime,
       no_of_servings: recipe.noOfServings,
       url: recipe.image,
+      category: recipe.category,
+      calories: recipe.calories,
     },
     mode: "onChange",
   });
@@ -124,6 +126,29 @@ const FieldsForRecipeInformation = ({
           />
           <FormField
             control={form.control}
+            name="category"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Recipe Category
+                  <span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Recipe Category (eg. Curry or Dessert or Snacks)"
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>
+                  Enter the category of the recipe this will help users to find
+                  your recipe
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="description"
             render={({ field }) => (
               <FormItem>
@@ -131,6 +156,7 @@ const FieldsForRecipeInformation = ({
                   Recipe Description
                   <span className="text-red-500">*</span>
                 </FormLabel>
+                oking_time
                 <FormControl>
                   <Textarea
                     placeholder="Recipe Description (eg. A simple recipe to make Chicken Manchuria)"
@@ -186,6 +212,24 @@ const FieldsForRecipeInformation = ({
                 </FormControl>
                 <FormDescription>
                   Enter the cooking time of the recipe in minutes
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="calories"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Calories<span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input placeholder="Calories (eg. 300)" {...field} />
+                </FormControl>
+                <FormDescription>
+                  Enter the calories of the recipe in Kcal
                 </FormDescription>
                 <FormMessage />
               </FormItem>

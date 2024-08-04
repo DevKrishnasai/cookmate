@@ -27,10 +27,12 @@ const page = async ({ params }: { params: { recipe: string } }) => {
   }
 
   const requiredFields = [
-    recipe.title.length > 2,
-    recipe.description.length > 10,
+    recipe.title.length > 1,
+    recipe.description.length > 1,
     recipe.steps.length > 0,
     recipe.cookTime > 0,
+    recipe.calories > 0,
+    recipe.category.length > 0,
     recipe.image.length > 0,
     recipe.ingredients.every((ing) => ing.name.length > 0),
     recipe.steps.every((step) => step.description.length > 3),
