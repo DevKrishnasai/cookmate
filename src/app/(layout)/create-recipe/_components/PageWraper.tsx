@@ -79,12 +79,14 @@ const PageWraper = ({ recipe, isPublishable }: PageWraperProps) => {
 
   return (
     <>
-      <div className="flex justify-between items-center m-2">
+      <div className="flex justify-end lg:justify-between items-center m-2">
         {/* <Link href="/home" className="flex items-center gap-1">
           <ArrowLeft size={20} />
           <p className="font-bold">back</p>
         </Link> */}
-        <PathStack />
+        <div className="hidden lg:flex">
+          <PathStack />
+        </div>
 
         <ActionButtons
           recipeId={recipe.id}
@@ -94,7 +96,7 @@ const PageWraper = ({ recipe, isPublishable }: PageWraperProps) => {
           onPublish={onPublish}
         />
       </div>
-      <div className="m-2 flex flex-col lg:flex-row max-h-[calc(100vh-140px)] gap-4 overflow-y-auto">
+      <div className="m-2 flex flex-col lg:flex-row  gap-4 overflow-y-auto">
         <div className="w-full h-full  lg:w-2/5 border-2 shadow-xl rounded-lg p-3">
           <h1 className="font-bold text-xl">Recipe Basic Information</h1>
           <LeftSection

@@ -76,7 +76,7 @@ const RecipeDetail = ({
   };
 
   return (
-    <div className="w-full h-full border-2 rounded-lg shadow-xl m-6 ml-0 p-2 space-y-3 overflow-y-auto">
+    <div className="w-full h-full border-2 rounded-lg shadow-xl lg:m-6 lg:ml-0  space-y-3 ">
       <div className="relative">
         <Image
           src={recipe?.image || ""}
@@ -93,20 +93,20 @@ const RecipeDetail = ({
           <p className="text-lg text-gray-200">{recipe?.description}</p>
         </div>
       </div>
-      <div className="p-3 space-y-8">
+      <div className="p-3 space-y-8 h-full">
         <div className="flex items-center gap-2 w-full">
           <div className="flex w-full items-center justify-between text-sm text-gray-600 bg-gray-100 p-4 rounded-lg">
-            <span className="flex items-center">
+            <span className="flex items-center truncate">
               <FaClock className="mr-2" /> {recipe?.cookTime} mins
             </span>
-            <span className="flex items-center">
+            <span className="flex items-center truncate ml-2">
               <FaUsers className="mr-2" />{" "}
               {recipe?.noOfServings && recipe.noOfServings >= 2
                 ? `${recipe.noOfServings} Servings`
                 : `${recipe?.noOfServings} Serving`}
             </span>
-            <span className="flex items-center">
-              <FaFire className="mr-2" /> {recipe?.calories} Calories
+            <span className="flex items-center truncate ml-2">
+              <FaFire className="mr-2 " /> {recipe?.calories} Calories
             </span>
           </div>
           {!isPreview &&
@@ -116,7 +116,7 @@ const RecipeDetail = ({
                 <Heart
                   size={30}
                   className={cn(
-                    "ml-3  border-none",
+                    "lg:ml-3  border-none",
                     isFavorite && "fill-red-500"
                   )}
                   onClick={toggleFavorite}
@@ -126,7 +126,7 @@ const RecipeDetail = ({
                     <FcRating
                       size={30}
                       className={cn(
-                        "ml-2  border-none",
+                        "lg:ml-2  border-none",
                         isFavorite && "fill-red-500"
                       )}
                       onClick={() => setOpen(true)}
@@ -159,7 +159,7 @@ const RecipeDetail = ({
                 className=" bg-orange-100 p-3 flex justify-between items-center rounded-full"
               >
                 <span>{ingredient.name}</span>
-                <span className="font-medium mr-2">
+                <span className="font-medium ml-2 mr-2 truncate">
                   {ingredient.quantity} {ingredient.quantityType}
                 </span>
               </li>
@@ -181,7 +181,7 @@ const RecipeDetail = ({
                 onClick={() => toggleStep(step.step)}
               >
                 <span className="font-bold mr-4">{step.step}.</span>
-                <p className="flex-grow">{step.description}</p>
+                <p className="flex-grow text-wrap">{step.description}</p>
                 <FaCheckCircle
                   className={`text-2xl ${
                     completedSteps.includes(step.step)

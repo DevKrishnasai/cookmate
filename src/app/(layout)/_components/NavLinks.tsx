@@ -8,7 +8,10 @@ const links = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/settings", label: "Settings" },
 ];
-const NavLinks = () => {
+interface NavProps {
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+const NavLinks = ({ setOpen }: NavProps) => {
   const activePath = usePathname();
   return (
     <div className="flex flex-col justify-center items-center gap-5 ">
@@ -20,6 +23,7 @@ const NavLinks = () => {
             "text-base  w-3/4 h-full text-center p-2 rounded-lg border",
             activePath === href && "font-bold bg-black text-white"
           )}
+          onClick={() => setOpen(false)}
         >
           {label}
         </Link>

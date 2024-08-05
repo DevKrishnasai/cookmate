@@ -57,7 +57,6 @@ export function DataTable<TData, TValue>({
   });
 
   const [open, setOpen] = useState(false);
-  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [recipeName, setRecipeName] = useState("");
   const router = useRouter();
@@ -96,8 +95,8 @@ export function DataTable<TData, TValue>({
   };
 
   return (
-    <div className=" w-full ">
-      <div className="flex items-center justify-between pb-4">
+    <div className=" w-full px-4">
+      <div className="flex items-center justify-between gap-3 pb-4 ">
         <Input
           placeholder="Filter recipes by title"
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
@@ -115,7 +114,7 @@ export function DataTable<TData, TValue>({
           loading={loading}
         />
       </div>
-      <div className="rounded-md border w-full h-full   md:h-[calc(100vh-300px)] overflow-y-scroll">
+      <div className="rounded-md border w-full     overflow-y-scroll">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

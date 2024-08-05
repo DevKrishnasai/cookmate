@@ -63,8 +63,8 @@ const TopBar = ({ recipe }: TopBarProps) => {
   };
 
   return (
-    <div className="w-full p-2 flex justify-between items-center">
-      <div className="w-72 flex justify-start items-center border-2 gap-3 p-2 rounded-lg">
+    <div className="w-full p-2 flex justify-between gap-3 items-center">
+      <div className="ml-8 w-full lg:w-96 lg:ml-0  flex justify-start items-center border-2 gap-3 p-2 rounded-lg">
         <Search />
         <input
           placeholder="Search"
@@ -77,14 +77,16 @@ const TopBar = ({ recipe }: TopBarProps) => {
         <Link href="/settings">
           <LucideSettings />
         </Link>
-        <RecipeCreateDialog
-          trigger={<Button variant={"outline"}>create recipe</Button>}
-          open={open}
-          setOpen={setOpen}
-          onSubmit={createARecipe}
-          setRecipeName={setRecipeName}
-          loading={loading}
-        />
+        <div className="hidden lg:block">
+          <RecipeCreateDialog
+            trigger={<Button variant={"outline"}>create recipe</Button>}
+            open={open}
+            setOpen={setOpen}
+            onSubmit={createARecipe}
+            setRecipeName={setRecipeName}
+            loading={loading}
+          />
+        </div>
       </div>
     </div>
   );

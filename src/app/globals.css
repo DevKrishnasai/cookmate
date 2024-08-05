@@ -71,3 +71,15 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+*::-webkit-scrollbar {
+  width: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}

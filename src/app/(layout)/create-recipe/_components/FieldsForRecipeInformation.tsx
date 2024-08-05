@@ -86,7 +86,9 @@ const FieldsForRecipeInformation = ({
             ) : form.getValues("url") === "" ? (
               <div className=" flex flex-col  justify-center items-center ">
                 <ImageIcon size={40} />
-                <p className="text-gray-500">No thumbnail uploaded</p>
+                <p className="text-gray-500">
+                  No thumbnail uploaded <span className="text-red-500">*</span>
+                </p>
                 <p
                   className="hover:underline hover:cursor-pointer"
                   onClick={() => setEdit(true)}
@@ -156,7 +158,6 @@ const FieldsForRecipeInformation = ({
                   Recipe Description
                   <span className="text-red-500">*</span>
                 </FormLabel>
-                oking_time
                 <FormControl>
                   <Textarea
                     placeholder="Recipe Description (eg. A simple recipe to make Chicken Manchuria)"

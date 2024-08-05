@@ -38,7 +38,7 @@ const page = async ({ params }: { params: { recipe: string } }) => {
   }
 
   return (
-    <div className="w-full max-h-[calc(100vh-50px)] flex  ">
+    <div className="w-full h-full flex  relative">
       {recipe ? (
         <RecipeDetail
           recipe={recipe}

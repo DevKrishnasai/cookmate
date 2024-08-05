@@ -57,6 +57,7 @@ export async function updateRecipeBasicDetails(
         cookTime: data.cooking_time,
         description: data.description,
         image: data.url,
+        calories: data.calories,
       },
     });
 

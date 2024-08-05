@@ -40,7 +40,7 @@ const page = async ({
   let stars = 0;
 
   return (
-    <div className="w-full max-h-[calc(100vh-50px)] flex  ">
+    <div className="w-full h-full  lg:mr-5">
       {recipe ? (
         <RecipeDetail
           isPreview={true}
@@ -55,12 +55,12 @@ const page = async ({
         </div>
       )}
 
-      <div className="w-1/4 h-full border-2 rounded-lg shadow-xl m-6 ml-0 p-2 space-y-1 flex flex-col justify-center items-center text-center">
+      {/* <div className="w-1/4 h-full border-2 rounded-lg shadow-xl m-6 ml-0 p-2 space-y-1 flex flex-col justify-center items-center text-center">
         <p className="font-bold">previous recipes</p>
         <span className="text-sm">
           It will be shown up when the recipe gets published
         </span>
-      </div>
+      </div> */}
     </div>
   );
 };

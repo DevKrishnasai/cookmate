@@ -70,8 +70,10 @@ const LeftSection = ({
   }, [formData, saveRecipeInfo]);
 
   const onChange = (data: RecipeInformationType) => {
+    console.log(data);
     const formatedData = recipeInformation.safeParse(data);
     if (formatedData.success) {
+      console.log(formatedData.data);
       setFormData(formatedData.data);
     }
   };

@@ -11,7 +11,7 @@ const SideBarWraper = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="min-h-screen flex relative">
       <button
-        className="lg:hidden fixed top-4 left-4 z-20"
+        className="lg:hidden fixed top-7 left-4 z-50"
         onClick={() => setShowSidebar(!showSidebar)}
       >
         {showSidebar ? <X size={24} /> : <Menu size={24} />}
@@ -19,11 +19,11 @@ const SideBarWraper = ({ children }: { children: React.ReactNode }) => {
 
       <div
         className={cn(
-          showSidebar ? " w-1/2 absolute top-0 left-0 " : "hidden",
-          "lg:flex lg:w-1/5"
+          showSidebar ? " w-2/3 absolute -top-5 -left-5 " : "hidden ",
+          "lg:flex lg:w-1/5 lg:relative"
         )}
       >
-        <LeftBar />
+        <LeftBar open={showSidebar} setOpen={setShowSidebar} />
       </div>
 
       {children}

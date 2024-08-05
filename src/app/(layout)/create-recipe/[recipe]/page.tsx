@@ -41,7 +41,7 @@ const page = async ({ params }: { params: { recipe: string } }) => {
   const isRecipePublishable = requiredFields.every((field) => field);
 
   return (
-    <div className="w-full border-2 rounded-lg shadow-xl m-6 ml-0 p-2 space-y-3">
+    <div className="w-full h-full border-2 rounded-lg shadow-xl lg:m-6 lg:ml-0 p-2 space-y-3">
       <PageWraper recipe={recipe} isPublishable={isRecipePublishable} />
     </div>
   );

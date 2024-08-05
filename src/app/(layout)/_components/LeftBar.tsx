@@ -3,14 +3,18 @@
 import React, { useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import NavLinks from "./NavLinks";
-import { CookingPot, Star, Heart, User } from "lucide-react";
+import { CookingPot, Star, Heart, User, X } from "lucide-react";
 import { getUserElseCreate } from "@/actions/user";
 import { sideBarData, SideBarType } from "@/actions/sidebar";
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
+interface LeftBarProps {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-const LeftBar = () => {
+const LeftBar = ({ open, setOpen }: LeftBarProps) => {
   const [user, setUser] = useState<SideBarType | null>(null);
   const [loading, setLoading] = useState(true);
   const { isSignedIn } = useUser();
@@ -44,7 +48,7 @@ const LeftBar = () => {
 
   if (loading) {
     return (
-      <div className="w-full h-[calc(100vh-50px)] bg-green-50 lg:bg-white border-2 rounded-lg m-6 mr-3 flex flex-col justify-between shadow-xl overflow-y-auto z-50">
+      <div className=" w-full h-[calc(100vh-50px)] bg-green-50 lg:bg-white border-2 rounded-lg m-6 mr-3 flex flex-col justify-between shadow-xl overflow-y-auto z-40">
         <div>
           <Skeleton className="h-10 w-3/4 mx-auto mt-6" />
           <div className="flex flex-col items-center w-full mx-auto mt-10 px-4">
@@ -76,8 +80,16 @@ const LeftBar = () => {
   }
 
   return (
-    <div className="w-full h-[calc(100vh-50px)] bg-green-50 lg:bg-white border-2 rounded-lg m-6 mr-3 flex flex-col justify-between shadow-xl overflow-y-auto z-50">
+    <div className=" sticky top-5 left-0 w-full max-h-[calc(100vh-50px)] bg-green-50 lg:bg-white border-2 rounded-lg m-6 mr-3 flex flex-col justify-between shadow-xl overflow-y-auto z-50">
       <div>
+        {open && (
+          <X
+            size={30}
+            className="lg:opacity-0 absolute top-0 right-0  bg-red-500 rounded-full"
+            onClick={() => setOpen(false)}
+          />
+        )}
+
         <Link href="/">
           <h2 className="text-center font-bold text-3xl mt-6 text-green-600">
             COOKMATE
@@ -117,10 +129,10 @@ const LeftBar = () => {
           </div>
         </div>
         <div className="mt-10">
-          <NavLinks />
+          <NavLinks setOpen={setOpen} />
         </div>
       </div>
-      <div className="p-2">
+      <div className="p-2 mt-10">
         {isSignedIn ? (
           <SignOutButton>
             <button className="flex items-center justify-center w-full h-12 bg-red-500 hover:bg-red-600 text-white font-bold rounded-lg">
