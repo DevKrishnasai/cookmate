@@ -158,6 +158,7 @@ const FieldsForRecipeInformation = ({
                   Recipe Description
                   <span className="text-red-500">*</span>
                 </FormLabel>
+                oking_time
                 <FormControl>
                   <Textarea
                     placeholder="Recipe Description (eg. A simple recipe to make Chicken Manchuria)"
