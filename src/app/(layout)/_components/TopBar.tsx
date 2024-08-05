@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { createRecipe } from "@/actions/recipe";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useUser } from "@clerk/nextjs";
 interface TopBarProps {
   recipe: string;
   // setSearch: (search: string) => void;
@@ -17,6 +18,7 @@ const TopBar = ({ recipe }: TopBarProps) => {
   const [loading, setLoading] = useState(false);
   const [recipeName, setRecipeName] = useState("");
   const router = useRouter();
+  const { isSignedIn } = useUser();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -77,16 +79,18 @@ const TopBar = ({ recipe }: TopBarProps) => {
         <Link href="/settings">
           <LucideSettings />
         </Link>
-        <div className="hidden lg:block">
-          <RecipeCreateDialog
-            trigger={<Button variant={"outline"}>create recipe</Button>}
-            open={open}
-            setOpen={setOpen}
-            onSubmit={createARecipe}
-            setRecipeName={setRecipeName}
-            loading={loading}
-          />
-        </div>
+        {isSignedIn && (
+          <div className="hidden lg:block">
+            <RecipeCreateDialog
+              trigger={<Button variant={"outline"}>create recipe</Button>}
+              open={open}
+              setOpen={setOpen}
+              onSubmit={createARecipe}
+              setRecipeName={setRecipeName}
+              loading={loading}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
