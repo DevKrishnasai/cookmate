@@ -18,6 +18,75 @@ import Image from "next/image";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 
+const features = [
+  {
+    title: "Create Recipes",
+    description: "Easily create and publish your own unique recipes.",
+    icon: <ChefHat className="h-6 w-6 text-orange-500" />,
+  },
+  {
+    title: "Rate & Review",
+    description: "Rate recipes and read reviews from other food enthusiasts.",
+    icon: <Star className="h-6 w-6 text-orange-500" />,
+  },
+  {
+    title: "Detailed Information",
+    description:
+      "View comprehensive recipe details including ingredients, steps, calories, and more.",
+    icon: <Clock className="h-6 w-6 text-orange-500" />,
+  },
+  {
+    title: "Save Favorites",
+    description:
+      "Build your personal cookbook by saving your favorite recipes.",
+    icon: <Users className="h-6 w-6 text-orange-500" />,
+  },
+];
+
+const testimonials = [
+  {
+    quote:
+      "CookMate has transformed my cooking experience. I love how easy it is to create and share recipes!",
+    name: "L.Vignesh",
+    title: "Home Cook Enthusiast",
+  },
+  {
+    quote:
+      "As a professional chef, I find CookMate invaluable for organizing my recipes and connecting with food lovers.",
+    name: "Manoj",
+    title: "Executive Chef",
+  },
+  {
+    quote:
+      "The detailed nutritional information helps me stay on track with my diet while enjoying delicious meals.",
+    name: "Talent",
+    title: "Fitness Trainer",
+  },
+];
+
+const faqs = [
+  {
+    question: "Is CookMate free to use?",
+    answer:
+      "Yes, CookMate offers a free basic plan. We also have premium features available for a small monthly fee but for now its free.",
+  },
+  {
+    question: "Can I import recipes from other websites?",
+    answer:
+      "Currently, you can manually input recipes. We're working on an import feature for the future.",
+  },
+  {
+    question: "How accurate is the nutritional information?",
+    answer:
+      "We use a comprehensive database for nutritional calculations, but always recommend consulting with a nutritionist for precise dietary needs.",
+  },
+  {
+    question: "Can I make my recipes private?",
+    answer:
+      "Absolutely! You have full control over the privacy settings of your recipes.",
+  },
+];
+
 export default function Home() {
   const { userId } = auth();
   return (
@@ -181,72 +250,3 @@ export default function Home() {
     </div>
   );
 }
-
-const features = [
-  {
-    title: "Create Recipes",
-    description: "Easily create and publish your own unique recipes.",
-    icon: <ChefHat className="h-6 w-6 text-orange-500" />,
-  },
-  {
-    title: "Rate & Review",
-    description: "Rate recipes and read reviews from other food enthusiasts.",
-    icon: <Star className="h-6 w-6 text-orange-500" />,
-  },
-  {
-    title: "Detailed Information",
-    description:
-      "View comprehensive recipe details including ingredients, steps, calories, and more.",
-    icon: <Clock className="h-6 w-6 text-orange-500" />,
-  },
-  {
-    title: "Save Favorites",
-    description:
-      "Build your personal cookbook by saving your favorite recipes.",
-    icon: <Users className="h-6 w-6 text-orange-500" />,
-  },
-];
-
-const testimonials = [
-  {
-    quote:
-      "CookMate has transformed my cooking experience. I love how easy it is to create and share recipes!",
-    name: "L.Vignesh",
-    title: "Home Cook Enthusiast",
-  },
-  {
-    quote:
-      "As a professional chef, I find CookMate invaluable for organizing my recipes and connecting with food lovers.",
-    name: "Manoj",
-    title: "Executive Chef",
-  },
-  {
-    quote:
-      "The detailed nutritional information helps me stay on track with my diet while enjoying delicious meals.",
-    name: "Talent",
-    title: "Fitness Trainer",
-  },
-];
-
-const faqs = [
-  {
-    question: "Is CookMate free to use?",
-    answer:
-      "Yes, CookMate offers a free basic plan. We also have premium features available for a small monthly fee but for now its free.",
-  },
-  {
-    question: "Can I import recipes from other websites?",
-    answer:
-      "Currently, you can manually input recipes. We're working on an import feature for the future.",
-  },
-  {
-    question: "How accurate is the nutritional information?",
-    answer:
-      "We use a comprehensive database for nutritional calculations, but always recommend consulting with a nutritionist for precise dietary needs.",
-  },
-  {
-    question: "Can I make my recipes private?",
-    answer:
-      "Absolutely! You have full control over the privacy settings of your recipes.",
-  },
-];

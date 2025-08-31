@@ -61,7 +61,7 @@ const LeftSection = ({
   useEffect(() => {
     if (formData) {
       const timeout = setTimeout(() => {
-        console.log("Auto saving...");
+        // Auto saving removed
         saveRecipeInfo(formData);
       }, 3000);
 
@@ -70,10 +70,10 @@ const LeftSection = ({
   }, [formData, saveRecipeInfo]);
 
   const onChange = (data: RecipeInformationType) => {
-    console.log(data);
+    // Debug: removed
     const formatedData = recipeInformation.safeParse(data);
     if (formatedData.success) {
-      console.log(formatedData.data);
+      // Debug: removed
       setFormData(formatedData.data);
     }
   };

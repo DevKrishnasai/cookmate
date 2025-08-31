@@ -34,7 +34,7 @@ export async function getUserElseCreate() {
 
     return user;
   } catch (error) {
-    console.error("Error getting user", error);
+    // Silent error handling for production
     return null;
   }
 }

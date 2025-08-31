@@ -78,15 +78,14 @@ const RecipeStepsSection = ({
       setLoading(false);
       router.refresh();
     },
-    [recipe.id]
+    [recipe.id, setLoading, router]
   );
 
   useEffect(() => {
     if (formData) {
       const timeout = setTimeout(() => {
-        console.log("Auto saving...");
         saveRecipeInfo(formData);
-      }, 3000);
+      }, 5000); // Increased from 3000ms to 5000ms for better performance
 
       return () => clearTimeout(timeout);
     }
@@ -104,7 +103,7 @@ const RecipeStepsSection = ({
       onChange(value as RecipeStepType);
     });
     return () => subscription.unsubscribe();
-  }, [form]);
+  }, [form, setFormData]);
 
   return (
     <Form {...form}>

@@ -11,7 +11,7 @@ const page = async ({ searchParams }: { searchParams: { recipe: string } }) => {
     await getUserElseCreate();
   }
   const recipes = await getRecipesWithName(searchParams.recipe);
-  console.log(searchParams.recipe);
+  // Debug: removed
   return (
     <div className="w-full border-2 shadow-xl rounded-lg lg:m-6 lg:ml-0 p-2">
       <TopBar recipe={searchParams.recipe} />

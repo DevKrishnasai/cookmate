@@ -27,7 +27,7 @@ const TopBar = ({ recipe }: TopBarProps) => {
       } else {
         router.push(`/home`);
       }
-    }, 600);
+    }, 800); // Increased from 600ms to 800ms for better performance
     return () => clearTimeout(timer);
   }, [router, search]);
 

@@ -31,7 +31,7 @@ export async function getAllRecipesByUserId(id: string) {
 
     return structuredRecipes;
   } catch (error) {
-    console.error("Error fetching recipes", error);
+    // Silent error handling for production
     return null;
   }
 }
@@ -57,6 +57,6 @@ export async function deleteRecipeById(id: string) {
       },
     });
   } catch (error) {
-    console.error("Error deleting recipe", error);
+    // Silent error handling for production
   }
 }

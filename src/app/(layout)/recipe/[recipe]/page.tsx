@@ -7,10 +7,10 @@ import { db } from "@/lib/db";
 
 const page = async ({ params }: { params: { recipe: string } }) => {
   const name = params.recipe.trim().split("-").join(" ");
-  console.log(name);
+  // Debug: removed
   const user = await getUserElseCreate();
   const recipe = await getFullRecipeDetails(name);
-  console.log(recipe);
+  // Debug: removed
 
   let visitedUser = true;
   let favorite = false;
