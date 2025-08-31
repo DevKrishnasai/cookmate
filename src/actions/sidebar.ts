@@ -25,7 +25,7 @@ export async function sideBarData(userId: string) {
 
     return userStats;
   } catch (error) {
-    console.error("Error fetching user stats:", error);
+    // Silent error handling for production
     return null;
   }
 }

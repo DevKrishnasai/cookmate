@@ -18,8 +18,6 @@ export async function createRecipe(name: string) {
       redirect("/sign-in");
     }
 
-    console.log(user, "~~~~~~~~~~~~~~~~", name);
-
     const data = await db.recipe.create({
       data: {
         title: name,
@@ -29,7 +27,7 @@ export async function createRecipe(name: string) {
 
     return data.id;
   } catch (error) {
-    console.error("Error creating recipe", error);
+    // Silent error handling for production
     return null;
   }
 }
@@ -63,7 +61,7 @@ export async function updateRecipeBasicDetails(
 
     return true;
   } catch (error) {
-    console.error("Error creating recipe", error);
+    // Silent error handling for production
     return false;
   }
 }
@@ -105,11 +103,11 @@ export async function updateRecipeIngredients(
       })),
     });
 
-    console.log("Ingredients", x);
+    // Removed debug log
 
     return true;
   } catch (error) {
-    console.error("Error creating recipe", error);
+    // Silent error handling for production
     return false;
   }
 }
@@ -183,7 +181,7 @@ export async function publishRecipe(recipeId: string) {
 
     return true;
   } catch (error) {
-    console.error("Error creating recipe", error);
+    // Silent error handling for production
     return false;
   }
 }
@@ -235,7 +233,7 @@ export async function getRecipesWithName(name: string) {
 
     return recipesWithAverageRating;
   } catch (error) {
-    console.error("Error getting recipes", error);
+    // Silent error handling for production
     return [];
   }
 }
@@ -262,7 +260,7 @@ export async function getFullRecipeDetails(title: string) {
     });
     return recipe;
   } catch (error) {
-    console.error("Error getting recipes", error);
+    // Silent error handling for production
     return null;
   }
 }
@@ -286,7 +284,7 @@ export async function getFullRecipeDetailsById(id: string) {
     });
     return recipe;
   } catch (error) {
-    console.error("Error getting recipes", error);
+    // Silent error handling for production
     return null;
   }
 }
@@ -332,7 +330,7 @@ export async function favoriteARecipe(recipeId: string) {
 
     return true;
   } catch (error) {
-    console.error("Error favoriting recipe", error);
+    // Silent error handling for production
     return false;
   }
 }
@@ -375,7 +373,7 @@ export async function rateARecipe(recipeId: string, stars: number) {
 
     return true;
   } catch (error) {
-    console.error("Error rating recipe", error);
+    // Silent error handling for production
     return false;
   }
 }
