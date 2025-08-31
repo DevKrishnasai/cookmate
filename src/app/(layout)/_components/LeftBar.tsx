@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, memo } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import NavLinks from "./NavLinks";
-import { CookingPot, Star, Heart, User, X } from "lucide-react";
+import { CookingPot, Star, Heart, X } from "lucide-react";
 import { getUserElseCreate } from "@/actions/user";
 import { sideBarData, SideBarType } from "@/actions/sidebar";
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
@@ -19,14 +19,14 @@ const LeftBar = ({ open, setOpen }: LeftBarProps) => {
   const [loading, setLoading] = useState(true);
   const { isSignedIn } = useUser();
 
+  const currentYear = useMemo(() => new Date().getFullYear(), []);
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const userData = await getUserElseCreate();
         if (userData && userData.id) {
-          console.log("userData", userData);
           const response = await sideBarData(userData.id);
-          console.log("response", response);
           if (response) {
             setUser(response);
           } else {
@@ -44,7 +44,7 @@ const LeftBar = ({ open, setOpen }: LeftBarProps) => {
     };
 
     fetchUserData();
-  }, []);
+  }, [isSignedIn]);
 
   if (loading) {
     return (
@@ -147,14 +147,14 @@ const LeftBar = ({ open, setOpen }: LeftBarProps) => {
           </SignInButton>
         )}
         <p className="text-center text-gray-500 text-sm mb-4 mt-4">
-          © {new Date().getFullYear()} COOKMATE. All rights reserved.
+          © {currentYear} COOKMATE. All rights reserved.
         </p>
       </div>
     </div>
   );
 };
 
-const UserStat = ({
+const UserStat = memo(({
   icon,
   label,
   value,
@@ -168,6 +168,8 @@ const UserStat = ({
     <span className="font-bold text-gray-800">{value}</span>
     <span className="text-sm text-gray-600">{label}</span>
   </div>
-);
+));
+
+UserStat.displayName = 'UserStat';
 
 export default LeftBar;

@@ -34,7 +34,7 @@ const PageWraper = ({ recipe, isPublishable }: PageWraperProps) => {
   const [steps, setSteps] = useState<RecipeStepType | null>(null);
   const router = useRouter();
   const basicDetails = async (data: RecipeInformationType) => {
-    const isSuccess = await updateRecipeBasicDetails(recipe.id, {
+    await updateRecipeBasicDetails(recipe.id, {
       ...data,
     });
   };
@@ -46,13 +46,13 @@ const PageWraper = ({ recipe, isPublishable }: PageWraperProps) => {
       quantity_type: ing.quantity_type,
     }));
 
-    const isSuccess = await updateRecipeIngredients(recipe.id, {
+    await updateRecipeIngredients(recipe.id, {
       ingredients: formattedIngredients,
     });
   };
 
   const stepsDetails = async (data: RecipeStepType) => {
-    const isSuccess = await updateRecipeSteps(recipe.id, {
+    await updateRecipeSteps(recipe.id, {
       steps: data.steps,
     });
   };
