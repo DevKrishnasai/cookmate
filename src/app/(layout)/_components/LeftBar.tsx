@@ -36,7 +36,7 @@ const LeftBar = ({ open, setOpen }: LeftBarProps) => {
           setUser(null);
         }
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        // Silent error handling for production
         setUser(null);
       } finally {
         setLoading(false);

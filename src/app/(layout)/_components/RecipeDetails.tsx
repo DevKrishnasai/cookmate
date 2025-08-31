@@ -68,7 +68,7 @@ const RecipeDetail = ({
       });
       router.refresh();
     } catch (error) {
-      console.error("Error while toggling favorite", error);
+      // Silent error handling for production
       toast.error("Error while favoriting recipe", {
         id: "favorite",
       });

@@ -113,7 +113,7 @@ const RecipeIngredientsSection = ({
   useEffect(() => {
     if (formData) {
       const timeout = setTimeout(() => {
-        console.log("Auto saving...");
+        // Auto saving removed
         saveIngredients(formData);
       }, 3000);
 
@@ -143,7 +143,7 @@ const RecipeIngredientsSection = ({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit, (errors) =>
-          console.error("Form errors", errors)
+          // Silent error handling
         )}
         className="space-y-3"
       >

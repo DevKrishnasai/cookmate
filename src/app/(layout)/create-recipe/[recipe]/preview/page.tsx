@@ -11,7 +11,7 @@ const page = async ({
   searchParams: { recipeId: string };
 }) => {
   const id = searchParams.recipeId;
-  console.log(searchParams);
+  // Debug: removed
   const user = await getUserElseCreate();
 
   if (!user) {
@@ -19,7 +19,7 @@ const page = async ({
   }
 
   const recipe = await getFullRecipeDetailsById(id);
-  console.log(recipe);
+  // Debug: removed
   if (recipe) {
     const u = await db.recipe.findUnique({
       where: {

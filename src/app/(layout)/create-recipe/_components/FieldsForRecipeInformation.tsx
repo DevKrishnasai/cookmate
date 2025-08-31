@@ -67,7 +67,7 @@ const FieldsForRecipeInformation = ({
     <div>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit, (err) => console.error(err))}
+          onSubmit={form.handleSubmit(onSubmit, (err) => {})}
           className="space-y-4"
         >
           <div
@@ -80,7 +80,7 @@ const FieldsForRecipeInformation = ({
                 onClientUploadComplete={(res) => {
                   setEdit(false);
                   form.setValue("url", res[0].url);
-                  console.log(res);
+                  // Upload completed
                 }}
               />
             ) : form.getValues("url") === "" ? (
